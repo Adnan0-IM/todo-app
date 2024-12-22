@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputArea from "./InputArea";
 import TodoItem from "./TodoItem";
 import "./App.css";
 
 function App() {
-  const [item, setItem] = useState([]);
+  const [item, setItem] = useState(() => {
+    const savedItem = localStorage.getItem("item");
+    return savedItem ? JSON.parse(savedItem) : [];
+  });
+
+  // Save item to localStorage whenever item change
+  useEffect(() => {
+    localStorage.setItem("item", JSON.stringify(item));
+  }, [item]);
 
   const handlebutton = (inputText) => {
     inputText !== "" && setItem([...item, inputText]);
